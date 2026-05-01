@@ -89,6 +89,15 @@ for i, val in enumerate(df['pred']):
     y = height - padding - (val / max_val) * (height - 2*padding)
     pred_points.append(f"{x},{y}")
 
+shadow_points = []
+offset_x = 6
+offset_y = 10
+
+for i, val in enumerate(df['count']):
+    x = padding + i * (width - 2*padding) / len(df) + offset_x
+    y = height - padding - (val / max_val) * (height - 2*padding) + offset_y
+    shadow_points.append(f"{x},{y}")
+
 svg = f"""
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
 
@@ -98,60 +107,51 @@ svg = f"""
     <stop offset="100%" stop-color="#ff6ec7"/>
   </linearGradient>
 
-  <filter id="glow">
-    <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
-    <feMerge>
-      <feMergeNode in="coloredBlur"/>
-      <feMergeNode in="SourceGraphic"/>
-    </feMerge>
+  <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#ff6ec7" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
+  </linearGradient>
+
+  <filter id="blur">
+    <feGaussianBlur stdDeviation="4"/>
   </filter>
 </defs>
 
 <style>
-.line {{
+.main {{
     stroke: url(#grad);
     stroke-width: 3;
     fill: none;
-    filter: url(#glow);
-    stroke-dasharray: 2000;
-    stroke-dashoffset: 2000;
-    animation: draw 3s ease-out forwards;
+    filter: drop-shadow(0 0 6px #7df9ff);
 }}
 
-.pred {{
+.shadow {{
     stroke: #ff6ec7;
-    stroke-width: 2;
+    stroke-width: 3;
+    opacity: 0.25;
     fill: none;
-    stroke-dasharray: 6,6;
-    opacity: 0.7;
+    filter: url(#blur);
 }}
 
-.dot {{
-    fill: #ff6ec7;
-    animation: pulse 2s infinite;
-}}
-
-@keyframes draw {{
-    to {{ stroke-dashoffset: 0; }}
-}}
-
-@keyframes pulse {{
-    0% {{ r: 2; opacity: 0.6; }}
-    50% {{ r: 5; opacity: 1; }}
-    100% {{ r: 2; opacity: 0.6; }}
+.floor {{
+    fill: url(#floorGrad);
 }}
 </style>
 
 <rect width="100%" height="100%" fill="#0d1117"/>
 
-<polyline class="line" points="{' '.join(points)}"/>
-<polyline class="pred" points="{' '.join(pred_points)}"/>
+<!-- 🔥 shadow layer -->
+<polyline class="shadow" points="{' '.join(shadow_points)}"/>
 
-{"".join([f'<circle class="dot" cx="{p.split(",")[0]}" cy="{p.split(",")[1]}" r="2"/>' for p in points[-10:]])}
+<!-- 🔥 main graph -->
+<polyline class="main" points="{' '.join(points)}"/>
 
-<text x="20" y="30" fill="#c084fc" font-size="18" font-weight="bold">
-🔥 Streak: {streak} days
-</text>
+<!-- 🔥 floor glow -->
+<polygon class="floor" points="
+{' '.join(points)}
+{points[-1].split(',')[0]},{height-padding}
+{points[0].split(',')[0]},{height-padding}
+"/>
 
 </svg>
 """
