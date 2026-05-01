@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np
+from datetime import datetime, timedelta
 
 USERNAME = "sarowarahmed"
 
@@ -10,21 +11,15 @@ data = requests.get(url).json()
 days = []
 counts = []
 
-days = []
-counts = []
-
+# 🔁 robust parsing
 contrib_data = data['contributions']
 
-# ✅ Case 1: dict with weeks
 if isinstance(contrib_data, dict):
-    weeks = contrib_data.get('weeks', [])
-    for week in weeks:
+    for week in contrib_data.get('weeks', []):
         for day in week.get('contributionDays', []):
             days.append(day['date'])
             counts.append(day['contributionCount'])
-
-# ✅ Case 2: list (your current case)
-elif isinstance(contrib_data, list):
+else:
     for week in contrib_data:
         for day in week.get('days', []):
             days.append(day['date'])
@@ -33,30 +28,89 @@ elif isinstance(contrib_data, list):
 df = pd.DataFrame({
     "date": pd.to_datetime(days),
     "count": counts
-})
+}).sort_values("date")
 
-# Last 30 days only
-df = df.sort_values("date").tail(30)
-df['day'] = range(1, len(df)+1)
+df = df.tail(60).reset_index(drop=True)
 
-# Style
-plt.style.use("dark_background")
+# 📊 STREAK CALCULATION
+streak = 0
+for val in reversed(df['count']):
+    if val > 0:
+        streak += 1
+    else:
+        break
 
-plt.figure(figsize=(14,5))
-plt.plot(
-    df['day'], df['count'],
-    color="#7df9ff",
-    linewidth=2,
-    marker='o',
-    markerfacecolor="#ff6ec7"
-)
+# 📈 SIMPLE ML PREDICTION (moving average)
+df['pred'] = df['count'].rolling(5).mean().fillna(0)
 
-plt.fill_between(df['day'], df['count'], alpha=0.15)
+# 🎨 SVG GENERATION (CUSTOM — NO MATPLOTLIB)
+width = 800
+height = 300
+padding = 40
 
-plt.title(f"{USERNAME}'s Contribution Graph", color="#c084fc", fontsize=16)
-plt.xlabel("Days")
-plt.ylabel("Contributions")
+max_val = max(df['count'].max(), 1)
 
-plt.grid(color="#444", linestyle='--', linewidth=0.5)
+points = []
+pred_points = []
 
-plt.savefig("graph.svg", format="svg", bbox_inches="tight")
+for i, val in enumerate(df['count']):
+    x = padding + i * (width - 2*padding) / len(df)
+    y = height - padding - (val / max_val) * (height - 2*padding)
+    points.append(f"{x},{y}")
+
+for i, val in enumerate(df['pred']):
+    x = padding + i * (width - 2*padding) / len(df)
+    y = height - padding - (val / max_val) * (height - 2*padding)
+    pred_points.append(f"{x},{y}")
+
+svg = f"""
+<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+.glow {{
+    stroke: #7df9ff;
+    stroke-width: 2;
+    fill: none;
+    filter: drop-shadow(0 0 6px #7df9ff);
+}}
+
+.pred {{
+    stroke: #ff6ec7;
+    stroke-width: 2;
+    fill: none;
+    stroke-dasharray: 5,5;
+}}
+
+.dot {{
+    fill: #ff6ec7;
+}}
+
+@keyframes draw {{
+    from {{ stroke-dashoffset: 1000; }}
+    to {{ stroke-dashoffset: 0; }}
+}}
+
+.line {{
+    stroke-dasharray: 1000;
+    animation: draw 2s ease-out forwards;
+}}
+</style>
+
+<rect width="100%" height="100%" fill="#0d1117"/>
+
+<polyline class="glow line" points="{' '.join(points)}"/>
+<polyline class="pred" points="{' '.join(pred_points)}"/>
+
+<text x="20" y="30" fill="#c084fc" font-size="16">
+🔥 Streak: {streak} days
+</text>
+
+<text x="20" y="50" fill="#aaa" font-size="12">
+Predicted trend (dashed)
+</text>
+
+</svg>
+"""
+
+with open("graph.svg", "w") as f:
+    f.write(svg)
