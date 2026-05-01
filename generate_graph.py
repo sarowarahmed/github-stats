@@ -10,10 +10,25 @@ data = requests.get(url).json()
 days = []
 counts = []
 
-for week in data['contributions']['weeks']:
-    for day in week['contributionDays']:
-        days.append(day['date'])
-        counts.append(day['contributionCount'])
+days = []
+counts = []
+
+contrib_data = data['contributions']
+
+# ✅ Case 1: dict with weeks
+if isinstance(contrib_data, dict):
+    weeks = contrib_data.get('weeks', [])
+    for week in weeks:
+        for day in week.get('contributionDays', []):
+            days.append(day['date'])
+            counts.append(day['contributionCount'])
+
+# ✅ Case 2: list (your current case)
+elif isinstance(contrib_data, list):
+    for week in contrib_data:
+        for day in week.get('days', []):
+            days.append(day['date'])
+            counts.append(day['count'])
 
 df = pd.DataFrame({
     "date": pd.to_datetime(days),
