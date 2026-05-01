@@ -10,10 +10,10 @@ data = requests.get(url).json()
 days = []
 counts = []
 
-for week in data['contributions']:
-    for day in week['days']:
+for week in data['contributions']['weeks']:
+    for day in week['contributionDays']:
         days.append(day['date'])
-        counts.append(day['count'])
+        counts.append(day['contributionCount'])
 
 df = pd.DataFrame({
     "date": pd.to_datetime(days),
