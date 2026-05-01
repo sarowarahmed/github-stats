@@ -91,38 +91,65 @@ for i, val in enumerate(df['pred']):
 
 svg = f"""
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#7df9ff"/>
+    <stop offset="100%" stop-color="#ff6ec7"/>
+  </linearGradient>
+
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+    <feMerge>
+      <feMergeNode in="coloredBlur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</defs>
+
 <style>
-.glow {{
-    stroke: #7df9ff;
-    stroke-width: 2;
+.line {{
+    stroke: url(#grad);
+    stroke-width: 3;
     fill: none;
-    filter: drop-shadow(0 0 6px #7df9ff);
+    filter: url(#glow);
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: draw 3s ease-out forwards;
 }}
 
 .pred {{
     stroke: #ff6ec7;
     stroke-width: 2;
     fill: none;
-    stroke-dasharray: 5,5;
+    stroke-dasharray: 6,6;
+    opacity: 0.7;
 }}
 
-.line {{
-    stroke-dasharray: 1000;
-    animation: draw 2s ease-out forwards;
+.dot {{
+    fill: #ff6ec7;
+    animation: pulse 2s infinite;
 }}
 
 @keyframes draw {{
-    from {{ stroke-dashoffset: 1000; }}
     to {{ stroke-dashoffset: 0; }}
+}}
+
+@keyframes pulse {{
+    0% {{ r: 2; opacity: 0.6; }}
+    50% {{ r: 5; opacity: 1; }}
+    100% {{ r: 2; opacity: 0.6; }}
 }}
 </style>
 
 <rect width="100%" height="100%" fill="#0d1117"/>
 
-<polyline class="glow line" points="{' '.join(points)}"/>
+<polyline class="line" points="{' '.join(points)}"/>
 <polyline class="pred" points="{' '.join(pred_points)}"/>
 
-<text x="20" y="30" fill="#c084fc" font-size="16">
+{"".join([f'<circle class="dot" cx="{p.split(",")[0]}" cy="{p.split(",")[1]}" r="2"/>' for p in points[-10:]])}
+
+<text x="20" y="30" fill="#c084fc" font-size="18" font-weight="bold">
 🔥 Streak: {streak} days
 </text>
 
