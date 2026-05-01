@@ -30,15 +30,24 @@ df = pd.DataFrame({
     "count": counts
 }).sort_values("date")
 
-df = df.tail(60).reset_index(drop=True)
+df = df.tail(365).reset_index(drop=True)
 
 # 📊 STREAK CALCULATION
+today = pd.Timestamp(datetime.utcnow().date())
+
+# Convert to dict for fast lookup
+date_count = dict(zip(df['date'].dt.date, df['count']))
+
 streak = 0
-for val in reversed(df['count']):
-    if val > 0:
-        streak += 1
-    else:
-        break
+current_day = today
+
+# 🔥 allow today OR yesterday as starting point
+if date_count.get(current_day, 0) == 0:
+    current_day = current_day - timedelta(days=1)
+
+while date_count.get(current_day, 0) > 0:
+    streak += 1
+    current_day -= timedelta(days=1)
 
 # 📈 SIMPLE ML PREDICTION (moving average)
 df['pred'] = df['count'].rolling(5).mean().fillna(0)
