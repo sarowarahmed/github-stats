@@ -1,62 +1,79 @@
 import requests
 import pandas as pd
-import numpy as np
 from datetime import datetime, timedelta
+import os
 
 USERNAME = "sarowarahmed"
+TOKEN = os.getenv("GH_TOKEN")
 
-url = f"https://github-contributions-api.jogruber.de/v4/{USERNAME}"
-data = requests.get(url).json()
+query = """
+{
+  user(login: "%s") {
+    contributionsCollection {
+      contributionCalendar {
+        weeks {
+          contributionDays {
+            date
+            contributionCount
+          }
+        }
+      }
+    }
+  }
+}
+""" % USERNAME
+
+headers = {
+    "Authorization": f"Bearer {TOKEN}"
+}
+
+response = requests.post(
+    "https://api.github.com/graphql",
+    json={"query": query},
+    headers=headers
+)
+
+data = response.json()
+
+# 🔥 Extract real data
+weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
 
 days = []
 counts = []
 
-# 🔁 robust parsing
-contrib_data = data['contributions']
-
-if isinstance(contrib_data, dict):
-    for week in contrib_data.get('weeks', []):
-        for day in week.get('contributionDays', []):
-            days.append(day['date'])
-            counts.append(day['contributionCount'])
-else:
-    for week in contrib_data:
-        for day in week.get('days', []):
-            days.append(day['date'])
-            counts.append(day['count'])
+for week in weeks:
+    for day in week["contributionDays"]:
+        days.append(day["date"])
+        counts.append(day["contributionCount"])
 
 df = pd.DataFrame({
     "date": pd.to_datetime(days),
     "count": counts
 }).sort_values("date")
 
-df = df.tail(365).reset_index(drop=True)
+# Fill missing dates
+full_range = pd.date_range(df['date'].min(), df['date'].max())
+df = df.set_index('date').reindex(full_range, fill_value=0).rename_axis('date').reset_index()
 
-# 📊 STREAK CALCULATION
-today = pd.Timestamp(datetime.utcnow().date())
-
-# Convert to dict for fast lookup
+# 🔥 STREAK (accurate now)
+today = datetime.utcnow().date()
 date_count = dict(zip(df['date'].dt.date, df['count']))
 
 streak = 0
 current_day = today
 
-# 🔥 allow today OR yesterday as starting point
 if date_count.get(current_day, 0) == 0:
-    current_day = current_day - timedelta(days=1)
+    current_day -= timedelta(days=1)
 
 while date_count.get(current_day, 0) > 0:
     streak += 1
     current_day -= timedelta(days=1)
 
-# 📈 SIMPLE ML PREDICTION (moving average)
+# Prediction
 df['pred'] = df['count'].rolling(5).mean().fillna(0)
 
-# 🎨 SVG GENERATION (CUSTOM — NO MATPLOTLIB)
-width = 800
-height = 300
-padding = 40
-
+# SVG
+width, height, padding = 800, 300, 40
 max_val = max(df['count'].max(), 1)
 
 points = []
@@ -74,7 +91,6 @@ for i, val in enumerate(df['pred']):
 
 svg = f"""
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
-
 <style>
 .glow {{
     stroke: #7df9ff;
@@ -90,18 +106,14 @@ svg = f"""
     stroke-dasharray: 5,5;
 }}
 
-.dot {{
-    fill: #ff6ec7;
+.line {{
+    stroke-dasharray: 1000;
+    animation: draw 2s ease-out forwards;
 }}
 
 @keyframes draw {{
     from {{ stroke-dashoffset: 1000; }}
     to {{ stroke-dashoffset: 0; }}
-}}
-
-.line {{
-    stroke-dasharray: 1000;
-    animation: draw 2s ease-out forwards;
 }}
 </style>
 
@@ -112,10 +124,6 @@ svg = f"""
 
 <text x="20" y="30" fill="#c084fc" font-size="16">
 🔥 Streak: {streak} days
-</text>
-
-<text x="20" y="50" fill="#aaa" font-size="12">
-Predicted trend (dashed)
 </text>
 
 </svg>
