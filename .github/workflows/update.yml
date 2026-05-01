@@ -25,6 +25,8 @@ jobs:
 
     - name: Generate graph
       run: python generate_graph.py
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - name: Commit & push
       run: |
