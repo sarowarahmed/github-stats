@@ -32,6 +32,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
-        git add graph.svg || echo "No graph generated"
-        git commit -m "update graph" || exit 0
+        git add graph.svg weekly.svg insights.svg || echo "No changes"
+        git commit -m "update dashboard" || exit 0
+        git pull --rebase origin main
         git push origin main
