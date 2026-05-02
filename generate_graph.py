@@ -195,17 +195,29 @@ for i, (_, row) in enumerate(last_7.iterrows()):
     color = "url(#grad)" if not is_today else "#ff6ec7"
 
     bars.append(f'''
-    <rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
-          fill="url(#grad)" />
+<rect x="{x}" y="180" width="50" height="0" rx="6" fill="{color}">
+  <animate attributeName="height"
+           from="0"
+           to="{bar_height}"
+           dur="0.8s"
+           fill="freeze"
+           calcMode="spline"
+           keySplines="0.4 0 0.2 1" />
+  <animate attributeName="y"
+           from="180"
+           to="{y}"
+           dur="0.8s"
+           fill="freeze"
+           calcMode="spline"
+           keySplines="0.4 0 0.2 1" />
+</rect>
 
-    <!-- light edge -->
-    <rect x="{x}" y="{y}" width="50" height="6"
-          fill="white" opacity="0.15"/>
+<rect x="{x}" y="{y}" width="50" height="6"
+      fill="white" opacity="0.15"/>
 
-    <!-- subtle glow -->
-    <rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
-          fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
-    ''')
+<rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
+      fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
+''')
 
     # 🔹 day label (bottom)
     labels.append(
