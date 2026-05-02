@@ -236,7 +236,7 @@ weekly_svg = f"""
 <defs>
   <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
     <stop offset="0%" stop-color="#7df9ff"/>
-    <stop offset="100%" stop-color="#ff6ec7"/>
+    <stop offset="100%" stop-color="#a78bfa" if not is_today else "#39FF14"/>
   </linearGradient>
 </defs>
 
