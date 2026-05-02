@@ -1,0 +1,42 @@
+
+<svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="100%" height="100%" fill="#0d1117"/>
+
+
+    <rect x="40" y="160.0" width="50" height="0.0"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="110" y="160.0" width="50" height="0.0"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="180" y="160.0" width="50" height="0.0"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="250" y="160.0" width="50" height="0.0"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="320" y="157.64705882352942" width="50" height="2.3529411764705883"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="390" y="141.1764705882353" width="50" height="18.823529411764707"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="460" y="72.94117647058823" width="50" height="87.05882352941177"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="530" y="40.0" width="50" height="120.0"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="600" y="47.05882352941177" width="50" height="112.94117647058823"
+          fill="#7df9ff" opacity="0.8"/>
+    
+    <rect x="670" y="65.88235294117648" width="50" height="94.11764705882352"
+          fill="#7df9ff" opacity="0.8"/>
+    
+
+<text x="20" y="20" fill="#c084fc" font-size="14">
+📊 Weekly Activity
+</text>
+
+</svg>
