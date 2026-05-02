@@ -194,10 +194,18 @@ for i, (_, row) in enumerate(last_7.iterrows()):
     is_today = row['date'].date() == datetime.utcnow().date()
     color = "url(#grad)" if not is_today else "#ff6ec7"
 
-    # 🔹 bar
-    bars.append(
-        f'<rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6" fill="{color}" />'
-    )
+    bars.append(f'''
+    <rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
+          fill="url(#grad)" />
+
+    <!-- light edge -->
+    <rect x="{x}" y="{y}" width="50" height="6"
+          fill="white" opacity="0.15"/>
+
+    <!-- subtle glow -->
+    <rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
+          fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
+    ''')
 
     # 🔹 day label (bottom)
     labels.append(
@@ -225,6 +233,11 @@ weekly_svg = f"""
 <rect x="5" y="5" width="790" height="190" rx="12" class="card"/>
 
 <text class="title" x="24" y="40">📊 Weekly Activity</text>
+
+<text x="700" y="40" fill="#666" font-size="10">
+Last 7 days
+</text>
+
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
 {''.join(bars)}
