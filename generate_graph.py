@@ -207,3 +207,74 @@ Built by Sarowar
 
 with open("graph.svg", "w") as f:
     f.write(svg)
+
+# 🔥 WEEKLY AGGREGATION
+df['week'] = df['date'].dt.to_period('W').astype(str)
+weekly = df.groupby('week')['count'].sum().tail(10)
+
+bar_width = 50
+bar_spacing = 20
+chart_height = 200
+
+bars = []
+
+max_week = max(weekly.max(), 1)
+
+for i, val in enumerate(weekly):
+    x = i * (bar_width + bar_spacing) + 40
+    bar_height = (val / max_week) * 120
+    y = chart_height - bar_height - 40
+
+    bars.append(f'''
+    <rect x="{x}" y="{y}" width="{bar_width}" height="{bar_height}"
+          fill="#7df9ff" opacity="0.8"/>
+    ''')
+
+weekly_svg = f"""
+<svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="100%" height="100%" fill="#0d1117"/>
+
+{''.join(bars)}
+
+<text x="20" y="20" fill="#c084fc" font-size="14">
+📊 Weekly Activity
+</text>
+
+</svg>
+"""
+
+with open("weekly.svg", "w") as f:
+    f.write(weekly_svg)
+
+# 🔥 INSIGHTS PANEL
+
+avg = round(df['count'].mean(), 2)
+max_day = df['count'].max()
+
+insight_svg = f"""
+<svg width="800" height="120" xmlns="http://www.w3.org/2000/svg">
+
+<rect width="100%" height="100%" fill="#0d1117"/>
+
+<text x="20" y="30" fill="#c084fc" font-size="14">
+🧠 Dev Insights
+</text>
+
+<text x="20" y="55" fill="#aaa" font-size="12">
+• Avg daily contributions: {avg}
+</text>
+
+<text x="20" y="75" fill="#aaa" font-size="12">
+• Peak day contributions: {max_day}
+</text>
+
+<text x="20" y="95" fill="#aaa" font-size="12">
+• Momentum: {momentum}
+</text>
+
+</svg>
+"""
+
+with open("insights.svg", "w") as f:
+    f.write(insight_svg)
