@@ -15,7 +15,7 @@
 .card { fill: #0d1117; stroke: #1f2937; stroke-width: 1; }
 .main { stroke: url(#grad); stroke-width: 3; fill: none; filter: drop-shadow(0 0 6px #7df9ff); }
 .shadow { stroke: #ff6ec7; stroke-width: 3; opacity: 0.25; fill: none; filter: blur(4px); }
-.pred { stroke: #ff6ec7; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.6; }
+.pred { stroke: #ffffff; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.4; }
 </style>
 
 
@@ -24,6 +24,6 @@
 <text class="title" x="24" y="40">📊 Weekly Activity</text>
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
-<rect x="40" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="110" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="180" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="250" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="320" y="177.64705882352942" width="40" height="2.3529411764705883" rx="4" fill="url(#grad)" /><rect x="390" y="161.1764705882353" width="40" height="18.823529411764707" rx="4" fill="url(#grad)" /><rect x="460" y="92.94117647058823" width="40" height="87.05882352941177" rx="4" fill="url(#grad)" /><rect x="530" y="60.0" width="40" height="120.0" rx="4" fill="url(#grad)" /><rect x="600" y="67.05882352941177" width="40" height="112.94117647058823" rx="4" fill="url(#grad)" /><rect x="670" y="83.52941176470588" width="40" height="96.47058823529412" rx="4" fill="url(#grad)" />
+<rect x="40" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="110" y="92.94117647058823" width="40" height="87.05882352941177" rx="4" fill="url(#grad)" /><rect x="180" y="60.0" width="40" height="120.0" rx="4" fill="url(#grad)" /><rect x="250" y="67.05882352941177" width="40" height="112.94117647058823" rx="4" fill="url(#grad)" /><rect x="320" y="81.1764705882353" width="40" height="98.8235294117647" rx="4" fill="url(#grad)" />
 
 </svg>
