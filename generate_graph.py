@@ -6,6 +6,7 @@ import os
 USERNAME = "sarowarahmed"
 TOKEN = os.getenv("GH_TOKEN")
 
+# ------------------ FETCH DATA ------------------ #
 query = """
 {
   user(login: "%s") {
@@ -23,9 +24,7 @@ query = """
 }
 """ % USERNAME
 
-headers = {
-    "Authorization": f"Bearer {TOKEN}"
-}
+headers = {"Authorization": f"Bearer {TOKEN}"}
 
 response = requests.post(
     "https://api.github.com/graphql",
@@ -35,12 +34,9 @@ response = requests.post(
 
 data = response.json()
 
-# 🔥 Extract data
 weeks = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
 
-days = []
-counts = []
-
+days, counts = [], []
 for week in weeks:
     for day in week["contributionDays"]:
         days.append(day["date"])
@@ -55,13 +51,12 @@ df = pd.DataFrame({
 full_range = pd.date_range(df['date'].min(), df['date'].max())
 df = df.set_index('date').reindex(full_range, fill_value=0).rename_axis('date').reset_index()
 
-# 🔥 STREAK
+# ------------------ STREAK ------------------ #
 today = datetime.utcnow().date()
 date_count = dict(zip(df['date'].dt.date, df['count']))
 
 streak = 0
 current_day = today
-
 if date_count.get(current_day, 0) == 0:
     current_day -= timedelta(days=1)
 
@@ -69,7 +64,7 @@ while date_count.get(current_day, 0) > 0:
     streak += 1
     current_day -= timedelta(days=1)
 
-# 🔥 MOMENTUM
+# ------------------ MOMENTUM ------------------ #
 recent = df['count'].tail(7).mean()
 previous = df['count'].tail(14).head(7).mean()
 
@@ -80,17 +75,13 @@ elif recent < previous:
 else:
     momentum = "➖ Stable"
 
-# Prediction
+# ------------------ GRAPH ------------------ #
 df['pred'] = df['count'].rolling(5).mean().fillna(0)
 
-# SVG dimensions
 width, height, padding = 800, 300, 40
 max_val = max(df['count'].max(), 1)
 
-points = []
-shadow_points = []
-pred_points = []
-
+points, shadow_points, pred_points = [], [], []
 offset_x, offset_y = 6, 10
 
 for i, val in enumerate(df['count']):
@@ -105,7 +96,7 @@ for i, val in enumerate(df['pred']):
     y = height - padding - (val / max_val) * (height - 2*padding)
     pred_points.append(f"{x},{y}")
 
-# 🔥 HEATMAP FUSION
+# Heatmap
 heat_blocks = []
 block_width = (width - 2*padding) / len(df)
 
@@ -118,8 +109,20 @@ for i, val in enumerate(df['count']):
         f'<rect x="{x}" y="{height-padding}" width="{block_width}" height="6" fill="#ff6ec7" opacity="{opacity}" />'
     )
 
-# SVG
-svg = f"""
+# ------------------ COMMON STYLE ------------------ #
+common_style = """
+<style>
+.title { fill: #c084fc; font-size: 16px; font-weight: 600; }
+.label { fill: #9ca3af; font-size: 12px; }
+.card { fill: #0d1117; stroke: #1f2937; stroke-width: 1; }
+.main { stroke: url(#grad); stroke-width: 3; fill: none; filter: drop-shadow(0 0 6px #7df9ff); }
+.shadow { stroke: #ff6ec7; stroke-width: 3; opacity: 0.25; fill: none; filter: blur(4px); }
+.pred { stroke: #ff6ec7; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.6; }
+</style>
+"""
+
+# ------------------ GRAPH SVG ------------------ #
+graph_svg = f"""
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
 
 <defs>
@@ -127,154 +130,100 @@ svg = f"""
     <stop offset="0%" stop-color="#7df9ff"/>
     <stop offset="100%" stop-color="#ff6ec7"/>
   </linearGradient>
-
-  <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%" stop-color="#ff6ec7" stop-opacity="0.3"/>
-    <stop offset="100%" stop-color="#0d1117" stop-opacity="0"/>
-  </linearGradient>
-
-  <filter id="blur">
-    <feGaussianBlur stdDeviation="4"/>
-  </filter>
 </defs>
 
-<style>
-.main {{
-    stroke: url(#grad);
-    stroke-width: 3;
-    fill: none;
-    filter: drop-shadow(0 0 6px #7df9ff);
-}}
+{common_style}
 
-.shadow {{
-    stroke: #ff6ec7;
-    stroke-width: 3;
-    opacity: 0.25;
-    fill: none;
-    filter: url(#blur);
-}}
+<rect x="5" y="5" width="790" height="290" rx="12" class="card"/>
 
-.floor {{
-    fill: url(#floorGrad);
-}}
+<text class="title" x="24" y="40">📈 Contribution Trend</text>
+<line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
-.pred {{
-    stroke: #ff6ec7;
-    stroke-width: 2;
-    fill: none;
-    stroke-dasharray: 5,5;
-    opacity: 0.6;
-}}
-</style>
-
-<rect width="100%" height="100%" fill="#0d1117"/>
-
-<!-- 🔥 Heatmap -->
 {''.join(heat_blocks)}
 
-<!-- 🔥 Shadow -->
 <polyline class="shadow" points="{' '.join(shadow_points)}"/>
-
-<!-- 🔥 Main Line -->
 <polyline class="main" points="{' '.join(points)}"/>
-
-<!-- 🔥 Prediction -->
 <polyline class="pred" points="{' '.join(pred_points)}"/>
 
-<!-- 🔥 Floor -->
-<polygon class="floor" points="
-{' '.join(points)}
-{points[-1].split(',')[0]},{height-padding}
-{points[0].split(',')[0]},{height-padding}
-"/>
+<!-- subtle hover illusion -->
+<circle cx="{points[-1].split(',')[0]}" cy="{points[-1].split(',')[1]}" r="5" fill="#ff6ec7" opacity="0.8">
+  <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/>
+</circle>
 
-<!-- 🔥 Labels -->
-<text x="20" y="30" fill="#c084fc" font-size="16">
-🔥 Streak: {streak} days
-</text>
-
-<text x="20" y="50" fill="#aaa" font-size="13">
-{momentum}
-</text>
-
-<!-- 🔥 Signature -->
-<text x="{width-180}" y="{height-15}" fill="#444" font-size="10">
-Built by Sarowar
-</text>
+<text class="label" x="24" y="70">🔥 Streak: {streak} days</text>
+<text class="label" x="24" y="90">{momentum}</text>
 
 </svg>
 """
 
-with open("graph.svg", "w") as f:
-    f.write(svg)
-
-# 🔥 WEEKLY AGGREGATION
+# ------------------ WEEKLY SVG ------------------ #
 df['week'] = df['date'].dt.to_period('W').astype(str)
 weekly = df.groupby('week')['count'].sum().tail(10)
 
-bar_width = 50
-bar_spacing = 20
-chart_height = 200
-
 bars = []
-
 max_week = max(weekly.max(), 1)
 
 for i, val in enumerate(weekly):
-    x = i * (bar_width + bar_spacing) + 40
-    bar_height = (val / max_week) * 120
-    y = chart_height - bar_height - 40
+    x = 40 + i * 70
+    h = (val / max_week) * 120
+    y = 180 - h
 
-    bars.append(f'''
-    <rect x="{x}" y="{y}" width="{bar_width}" height="{bar_height}"
-          fill="#7df9ff" opacity="0.8"/>
-    ''')
+    bars.append(
+        f'<rect x="{x}" y="{y}" width="40" height="{h}" rx="4" fill="url(#grad)" />'
+    )
 
 weekly_svg = f"""
 <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
 
-<rect width="100%" height="100%" fill="#0d1117"/>
+<defs>
+  <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#7df9ff"/>
+    <stop offset="100%" stop-color="#ff6ec7"/>
+  </linearGradient>
+</defs>
+
+{common_style}
+
+<rect x="5" y="5" width="790" height="190" rx="12" class="card"/>
+
+<text class="title" x="24" y="40">📊 Weekly Activity</text>
+<line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
 {''.join(bars)}
 
-<text x="20" y="20" fill="#c084fc" font-size="14">
-📊 Weekly Activity
-</text>
+</svg>
+"""
+
+# ------------------ INSIGHTS SVG ------------------ #
+avg = round(df['count'].mean(), 2)
+max_day = df['count'].max()
+
+insights_svg = f"""
+<svg width="800" height="140" xmlns="http://www.w3.org/2000/svg">
+
+{common_style}
+
+<rect x="5" y="5" width="790" height="130" rx="12" class="card"/>
+
+<text class="title" x="24" y="40">🧠 Dev Insights</text>
+<line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
+
+<text class="label" x="24" y="80">Avg: {avg}</text>
+<text class="label" x="400" y="80">Peak: {max_day}</text>
+
+<text class="label" x="24" y="105">Momentum: {momentum}</text>
+
+<text x="650" y="120" fill="#444" font-size="10">Built by Sarowar</text>
 
 </svg>
 """
+
+# ------------------ SAVE FILES ------------------ #
+with open("graph.svg", "w") as f:
+    f.write(graph_svg)
 
 with open("weekly.svg", "w") as f:
     f.write(weekly_svg)
 
-# 🔥 INSIGHTS PANEL
-
-avg = round(df['count'].mean(), 2)
-max_day = df['count'].max()
-
-insight_svg = f"""
-<svg width="800" height="120" xmlns="http://www.w3.org/2000/svg">
-
-<rect width="100%" height="100%" fill="#0d1117"/>
-
-<text x="20" y="30" fill="#c084fc" font-size="14">
-🧠 Dev Insights
-</text>
-
-<text x="20" y="55" fill="#aaa" font-size="12">
-• Avg daily contributions: {avg}
-</text>
-
-<text x="20" y="75" fill="#aaa" font-size="12">
-• Peak day contributions: {max_day}
-</text>
-
-<text x="20" y="95" fill="#aaa" font-size="12">
-• Momentum: {momentum}
-</text>
-
-</svg>
-"""
-
 with open("insights.svg", "w") as f:
-    f.write(insight_svg)
+    f.write(insights_svg)
