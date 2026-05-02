@@ -49,8 +49,7 @@ df = pd.DataFrame({
 
 # Fill missing dates
 full_range = pd.date_range(df['date'].min(), df['date'].max())
-df = df.set_index('date').reindex(full_range, fill_value=0).rename_axis('date').reset_index()
-
+df = df.tail(30).reset_index(drop=True)
 # ------------------ STREAK ------------------ #
 today = datetime.utcnow().date()
 date_count = dict(zip(df['date'].dt.date, df['count']))
@@ -117,11 +116,18 @@ common_style = """
 .card { fill: #0d1117; stroke: #1f2937; stroke-width: 1; }
 .main { stroke: url(#grad); stroke-width: 3; fill: none; filter: drop-shadow(0 0 6px #7df9ff); }
 .shadow { stroke: #ff6ec7; stroke-width: 3; opacity: 0.25; fill: none; filter: blur(4px); }
-.pred { stroke: #ff6ec7; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.6; }
+.pred { stroke: #ffffff; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.4; }
 </style>
 """
 
 # ------------------ GRAPH SVG ------------------ #
+
+circles = []
+
+for p in points:
+    x, y = p.split(",")
+    circles.append(f'<circle cx="{x}" cy="{y}" r="3" fill="white" stroke="#ff6ec7" stroke-width="1"/>')
+
 graph_svg = f"""
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
 
@@ -144,6 +150,9 @@ graph_svg = f"""
 <polyline class="shadow" points="{' '.join(shadow_points)}"/>
 <polyline class="main" points="{' '.join(points)}"/>
 <polyline class="pred" points="{' '.join(pred_points)}"/>
+
+<!-- 🔥 ADD CIRCLES HERE -->
+{''.join(circles)}
 
 <!-- subtle hover illusion -->
 <circle cx="{points[-1].split(',')[0]}" cy="{points[-1].split(',')[1]}" r="5" fill="#ff6ec7" opacity="0.8">
