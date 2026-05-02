@@ -1,22 +1,27 @@
 
-<svg width="800" height="120" xmlns="http://www.w3.org/2000/svg">
+<svg width="800" height="140" xmlns="http://www.w3.org/2000/svg">
 
-<rect width="100%" height="100%" fill="#0d1117"/>
 
-<text x="20" y="30" fill="#c084fc" font-size="14">
-🧠 Dev Insights
-</text>
+<style>
+.title { fill: #c084fc; font-size: 16px; font-weight: 600; }
+.label { fill: #9ca3af; font-size: 12px; }
+.card { fill: #0d1117; stroke: #1f2937; stroke-width: 1; }
+.main { stroke: url(#grad); stroke-width: 3; fill: none; filter: drop-shadow(0 0 6px #7df9ff); }
+.shadow { stroke: #ff6ec7; stroke-width: 3; opacity: 0.25; fill: none; filter: blur(4px); }
+.pred { stroke: #ff6ec7; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.6; }
+</style>
 
-<text x="20" y="55" fill="#aaa" font-size="12">
-• Avg daily contributions: 0.64
-</text>
 
-<text x="20" y="75" fill="#aaa" font-size="12">
-• Peak day contributions: 21
-</text>
+<rect x="5" y="5" width="790" height="130" rx="12" class="card"/>
 
-<text x="20" y="95" fill="#aaa" font-size="12">
-• Momentum: 📈 Rising
-</text>
+<text class="title" x="24" y="40">🧠 Dev Insights</text>
+<line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
+
+<text class="label" x="24" y="80">Avg: 0.64</text>
+<text class="label" x="400" y="80">Peak: 21</text>
+
+<text class="label" x="24" y="105">Momentum: 📈 Rising</text>
+
+<text x="650" y="120" fill="#444" font-size="10">Built by Sarowar</text>
 
 </svg>

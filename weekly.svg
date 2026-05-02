@@ -1,42 +1,29 @@
 
 <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
 
-<rect width="100%" height="100%" fill="#0d1117"/>
+<defs>
+  <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#7df9ff"/>
+    <stop offset="100%" stop-color="#ff6ec7"/>
+  </linearGradient>
+</defs>
 
 
-    <rect x="40" y="160.0" width="50" height="0.0"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="110" y="160.0" width="50" height="0.0"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="180" y="160.0" width="50" height="0.0"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="250" y="160.0" width="50" height="0.0"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="320" y="157.64705882352942" width="50" height="2.3529411764705883"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="390" y="141.1764705882353" width="50" height="18.823529411764707"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="460" y="72.94117647058823" width="50" height="87.05882352941177"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="530" y="40.0" width="50" height="120.0"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="600" y="47.05882352941177" width="50" height="112.94117647058823"
-          fill="#7df9ff" opacity="0.8"/>
-    
-    <rect x="670" y="65.88235294117648" width="50" height="94.11764705882352"
-          fill="#7df9ff" opacity="0.8"/>
-    
+<style>
+.title { fill: #c084fc; font-size: 16px; font-weight: 600; }
+.label { fill: #9ca3af; font-size: 12px; }
+.card { fill: #0d1117; stroke: #1f2937; stroke-width: 1; }
+.main { stroke: url(#grad); stroke-width: 3; fill: none; filter: drop-shadow(0 0 6px #7df9ff); }
+.shadow { stroke: #ff6ec7; stroke-width: 3; opacity: 0.25; fill: none; filter: blur(4px); }
+.pred { stroke: #ff6ec7; stroke-width: 2; fill: none; stroke-dasharray: 5,5; opacity: 0.6; }
+</style>
 
-<text x="20" y="20" fill="#c084fc" font-size="14">
-📊 Weekly Activity
-</text>
+
+<rect x="5" y="5" width="790" height="190" rx="12" class="card"/>
+
+<text class="title" x="24" y="40">📊 Weekly Activity</text>
+<line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
+
+<rect x="40" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="110" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="180" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="250" y="180.0" width="40" height="0.0" rx="4" fill="url(#grad)" /><rect x="320" y="177.64705882352942" width="40" height="2.3529411764705883" rx="4" fill="url(#grad)" /><rect x="390" y="161.1764705882353" width="40" height="18.823529411764707" rx="4" fill="url(#grad)" /><rect x="460" y="92.94117647058823" width="40" height="87.05882352941177" rx="4" fill="url(#grad)" /><rect x="530" y="60.0" width="40" height="120.0" rx="4" fill="url(#grad)" /><rect x="600" y="67.05882352941177" width="40" height="112.94117647058823" rx="4" fill="url(#grad)" /><rect x="670" y="83.52941176470588" width="40" height="96.47058823529412" rx="4" fill="url(#grad)" />
 
 </svg>
