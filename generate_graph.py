@@ -211,7 +211,6 @@ for i, (_, row) in enumerate(last_7.iterrows()):
                begin="{delay}s"
                fill="freeze" />
     </rect>
-    ''')
 
     <rect x="{x}" y="{y}" width="50" height="6"
           fill="white" opacity="0.15"/>
