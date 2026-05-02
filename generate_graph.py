@@ -166,20 +166,49 @@ graph_svg = f"""
 """
 
 # ------------------ WEEKLY SVG ------------------ #
-df['week'] = df['date'].dt.to_period('W').astype(str)
-weekly = df.groupby('week')['count'].sum().tail(10)
+last_7 = df.tail(7).copy()
+
+# weekday labels
+last_7['day'] = last_7['date'].dt.day_name().str[:3]
+
+# force correct order
+order = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+last_7['day'] = pd.Categorical(last_7['day'], categories=order, ordered=True)
+
+last_7 = last_7.sort_values('day')
 
 bars = []
-max_week = max(weekly.max(), 1)
+labels = []
 
-for i, val in enumerate(weekly):
-    x = 40 + i * 70
-    h = (val / max_week) * 120
-    y = 180 - h
+max_val = max(last_7['count'].max(), 1)
 
+for i, (_, row) in enumerate(last_7.iterrows()):
+    val = row['count']
+    day = row['day']
+
+    x = 40 + i * 100
+    bar_height = (val / max_val) * 120
+    y = 180 - bar_height
+
+    # highlight today
+    is_today = row['date'].date() == datetime.utcnow().date()
+    color = "url(#grad)" if not is_today else "#ff6ec7"
+
+    # 🔹 bar
     bars.append(
-        f'<rect x="{x}" y="{y}" width="40" height="{h}" rx="4" fill="url(#grad)" />'
+        f'<rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6" fill="{color}" />'
     )
+
+    # 🔹 day label (bottom)
+    labels.append(
+        f'<text x="{x+15}" y="195" fill="#9ca3af" font-size="11">{day}</text>'
+    )
+
+    # 🔥 value label (TOP OF BAR)
+    if val > 0:
+        labels.append(
+            f'<text x="{x+15}" y="{y-5}" fill="#aaa" font-size="10">{val}</text>'
+        )
 
 weekly_svg = f"""
 <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
@@ -199,6 +228,7 @@ weekly_svg = f"""
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
 {''.join(bars)}
+{''.join(labels)}
 
 </svg>
 """
