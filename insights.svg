@@ -17,7 +17,7 @@
 <text class="title" x="24" y="40">🧠 Dev Insights</text>
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
-<text class="label" x="24" y="80">Avg: 6.17</text>
+<text class="label" x="24" y="80">Avg: 6.2</text>
 <text class="label" x="400" y="80">Peak: 21</text>
 
 <text class="label" x="24" y="105">Momentum: 📈 Rising</text>
