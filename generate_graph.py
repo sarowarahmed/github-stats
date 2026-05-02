@@ -192,7 +192,7 @@ for i, (_, row) in enumerate(last_7.iterrows()):
 
     # highlight today
     is_today = row['date'].date() == datetime.utcnow().date()
-    color = "url(#grad)" if not is_today else "#ff6ec7"
+    color = "url(#grad)" if not is_today else "#a78bfa"
 
     delay = i * 0.15  # stagger timing
 
@@ -236,7 +236,7 @@ weekly_svg = f"""
 <defs>
   <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
     <stop offset="0%" stop-color="#7df9ff"/>
-    <stop offset="100%" stop-color="#a78bfa" if not is_today else "#39FF14"/>
+    <stop offset="100%" stop-color="#39FF14"/>
   </linearGradient>
 </defs>
 
