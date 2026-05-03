@@ -135,7 +135,7 @@ Last 7 days
     <rect x="440" y="126.0" width="50" height="54.0" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="540" y="180" width="50" height="0" rx="6" fill="#ff4e50">
+    <rect x="540" y="180" width="50" height="0" rx="6" fill="url(#grad)">
       <animate attributeName="height"
                from="0"
                to="120.0"
@@ -156,7 +156,7 @@ Last 7 days
     <rect x="540" y="60.0" width="50" height="120.0" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="640" y="180" width="50" height="0" rx="6" fill="url(#grad)">
+    <rect x="640" y="180" width="50" height="0" rx="6" fill="#ff4e50">
       <animate attributeName="height"
                from="0"
                to="60.0"
