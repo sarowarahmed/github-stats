@@ -30,7 +30,7 @@ Last 7 days
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
 
-    <rect x="40" y="180" width="50" height="0" rx="6" fill="url(#grad)">
+    <rect x="40" y="180" width="50" height="0" rx="6" fill="#00ecbc">
       <animate attributeName="height"
                from="0"
                to="6.0"
@@ -156,7 +156,7 @@ Last 7 days
     <rect x="540" y="60.0" width="50" height="120.0" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="640" y="180" width="50" height="0" rx="6" fill="#00ecbc">
+    <rect x="640" y="180" width="50" height="0" rx="6" fill="url(#grad)">
       <animate attributeName="height"
                from="0"
                to="60.0"
