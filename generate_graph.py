@@ -151,7 +151,7 @@ graph_svg = f"""
 <line x1="{points[-1].split(',')[0]}" 
       y1="60" 
       x2="{points[-1].split(',')[0]}" 
-      y2="{height-40}"
+      y2="{height-padding}"
       stroke="#ff6ec7"
       stroke-opacity="0.3"
       stroke-dasharray="4,4"/>
@@ -234,7 +234,15 @@ for i, (_, row) in enumerate(last_7.iterrows()):
           fill="#ff6ec7" opacity="0.08"/>
     ''')
 
-# keep your light edge + glow after
+    # 🔥 MAIN BAR (on top)
+    bars.append(f'''
+    <rect x="{x}" y="180" width="50" height="0" rx="6" fill="{color}">
+      <animate attributeName="height" from="0" to="{bar_height}" dur="0.8s" fill="freeze"/>
+      <animate attributeName="y" from="180" to="{y}" dur="0.8s" fill="freeze"/>
+    </rect>
+    ''')
+
+    # keep your light edge + glow after
     bars.append(f'''
     <rect x="{x}" y="{y}" width="50" height="6"
           fill="white" opacity="0.15"/>
