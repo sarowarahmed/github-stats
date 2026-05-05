@@ -263,21 +263,57 @@ avg = round(df['count'].mean(), 2)
 max_day = df['count'].max()
 
 insights_svg = f"""
-<svg width="800" height="140" xmlns="http://www.w3.org/2000/svg">
+<svg width="800" height="160" xmlns="http://www.w3.org/2000/svg">
 
-{common_style}
+<defs>
+  <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#7df9ff" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#ff6ec7" stop-opacity="0.15"/>
+  </linearGradient>
+</defs>
 
-<rect x="5" y="5" width="790" height="130" rx="12" class="card"/>
+<style>
+.title {{ fill: #c084fc; font-size: 16px; font-weight: 600; }}
+.label {{ fill: #9ca3af; font-size: 11px; }}
+.value {{ fill: #ffffff; font-size: 18px; font-weight: 600; }}
+.card {{
+  fill: #0d1117;
+  stroke: #1f2937;
+  stroke-width: 1;
+}}
+.glass {{
+  fill: url(#cardGrad);
+  stroke: #7df9ff;
+  stroke-opacity: 0.2;
+}}
+</style>
 
+<!-- Outer Card -->
+<rect x="5" y="5" width="790" height="150" rx="12" class="card"/>
+
+<!-- Title -->
 <text class="title" x="24" y="40">🧠 Dev Insights</text>
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
-<text class="label" x="24" y="80">Avg: {avg}</text>
-<text class="label" x="400" y="80">Peak: {max_day}</text>
+<!-- ===== CARD 1: AVG ===== -->
+<rect x="40" y="70" width="200" height="70" rx="10" class="glass"/>
+<text class="label" x="60" y="95">Avg</text>
+<text class="value" x="60" y="120">{avg}</text>
 
-<text class="label" x="24" y="105">Momentum: {momentum}</text>
+<!-- ===== CARD 2: PEAK ===== -->
+<rect x="300" y="70" width="200" height="70" rx="10" class="glass"/>
+<text class="label" x="320" y="95">Peak</text>
+<text class="value" x="320" y="120">{max_day}</text>
 
-<text x="650" y="120" fill="#444" font-size="10">Built by Sarowar</text>
+<!-- ===== CARD 3: MOMENTUM ===== -->
+<rect x="560" y="70" width="200" height="70" rx="10"
+      fill="#ff6ec7" fill-opacity="0.15" stroke="#ff6ec7" stroke-opacity="0.3"/>
+
+<text class="label" x="580" y="95">Momentum</text>
+<text class="value" x="580" y="120">{momentum}</text>
+
+<!-- Signature -->
+<text x="640" y="145" fill="#444" font-size="10">Built by Sarowar</text>
 
 </svg>
 """
