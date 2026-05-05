@@ -274,6 +274,8 @@ def sparkline(data, width=160, height=30):
 
     return " ".join(points)
 
+avg = round(df['count'].mean(), 2)
+max_day = df['count'].max()
 last_14 = df['count'].tail(14).tolist()
 spark_avg = sparkline(last_14)
 spark_peak = sparkline(df['count'].tail(14).diff().fillna(0).abs().tolist())
