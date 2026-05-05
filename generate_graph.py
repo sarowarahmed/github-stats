@@ -226,6 +226,10 @@ for i, (_, row) in enumerate(last_7.iterrows()):
 
     <rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
+
+    <!-- TODAY BAR GLOW -->
+    <rect x="{x}" y="{y}" width="50" height="{bar_height}"
+          fill="#ff6ec7" opacity="0.08"/>
     ''')
 
     # 🔹 day label (bottom)
@@ -367,8 +371,8 @@ insights_svg = f"""
 </g>
 
 <!-- SIGNATURE -->
-<text x="720" y="40" fill="#9ca3af" opacity="0.8" font-size="11" text-anchor="end">
-Sarowar ⚡
+<text x="720" y="40" fill="#9ca3af" opacity="0.8" font-size="12" text-anchor="end">
+Built by Sarowar ⚡
 </text>
 
 </svg>
