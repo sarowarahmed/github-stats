@@ -259,11 +259,36 @@ Last 7 days
 """
 
 # ------------------ INSIGHTS SVG ------------------ #
-avg = round(df['count'].mean(), 2)
-max_day = df['count'].max()
+# ---------- SPARKLINE DATA ----------
+def sparkline(data, width=160, height=30):
+    if len(data) == 0:
+        return ""
 
+    max_val = max(data) if max(data) != 0 else 1
+    points = []
+
+    for i, val in enumerate(data):
+        x = i * (width / (len(data)-1)) if len(data) > 1 else 0
+        y = height - (val / max_val) * height
+        points.append(f"{x},{y}")
+
+    return " ".join(points)
+
+last_14 = df['count'].tail(14).tolist()
+spark_avg = sparkline(last_14)
+spark_peak = sparkline(df['count'].tail(14).diff().fillna(0).abs().tolist())
+spark_consistency = sparkline((df['count'] > 0).astype(int).tail(14).tolist())
+
+weekday_avg = df.groupby(df['date'].dt.dayofweek)['count'].mean().tolist()
+spark_bestday = sparkline(weekday_avg)
+
+# ---------- EXTRA METRICS ----------
+consistency = round((df['count'] > 0).mean() * 100)
+best_day = df.groupby(df['date'].dt.day_name())['count'].mean().idxmax()[:3]
+
+# ---------- SVG ----------
 insights_svg = f"""
-<svg width="800" height="160" xmlns="http://www.w3.org/2000/svg">
+<svg width="800" height="220" xmlns="http://www.w3.org/2000/svg">
 
 <defs>
   <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -274,46 +299,65 @@ insights_svg = f"""
 
 <style>
 .title {{ fill: #c084fc; font-size: 16px; font-weight: 600; }}
-.label {{ fill: #9ca3af; font-size: 11px; }}
-.value {{ fill: #ffffff; font-size: 18px; font-weight: 600; }}
-.card {{
-  fill: #0d1117;
-  stroke: #1f2937;
-  stroke-width: 1;
-}}
-.glass {{
-  fill: url(#cardGrad);
-  stroke: #7df9ff;
-  stroke-opacity: 0.2;
-}}
+.label {{ fill: #9ca3af; font-size: 11px; text-anchor: middle; }}
+.value {{ fill: #ffffff; font-size: 18px; font-weight: 600; text-anchor: middle; }}
+.card {{ fill: #0d1117; stroke: #1f2937; stroke-width: 1; }}
+.glass {{ fill: url(#cardGrad); stroke: #7df9ff; stroke-opacity: 0.2; }}
+.spark {{ fill: none; stroke: #7df9ff; stroke-width: 1.5; opacity: 0.7; }}
+.spark-alt {{ fill: none; stroke: #ff6ec7; stroke-width: 1.5; opacity: 0.6; }}
 </style>
 
-<!-- Outer Card -->
-<rect x="5" y="5" width="790" height="150" rx="12" class="card"/>
+<rect x="5" y="5" width="790" height="210" rx="12" class="card"/>
 
-<!-- Title -->
 <text class="title" x="24" y="40">🧠 Dev Insights</text>
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
-<!-- ===== CARD 1: AVG ===== -->
-<rect x="40" y="70" width="200" height="70" rx="10" class="glass"/>
-<text class="label" x="60" y="95">Avg</text>
-<text class="value" x="60" y="120">{avg}</text>
+<!-- ===== ROW 1 ===== -->
+<!-- AVG -->
+<g transform="translate(40,70)">
+  <rect width="200" height="80" rx="10" class="glass"/>
+  <text class="label" x="100" y="20">Avg</text>
+  <text class="value" x="100" y="45">{avg}</text>
+  <polyline class="spark" points="{spark_avg}" transform="translate(20,50)"/>
+</g>
 
-<!-- ===== CARD 2: PEAK ===== -->
-<rect x="300" y="70" width="200" height="70" rx="10" class="glass"/>
-<text class="label" x="320" y="95">Peak</text>
-<text class="value" x="320" y="120">{max_day}</text>
+<!-- PEAK -->
+<g transform="translate(300,70)">
+  <rect width="200" height="80" rx="10" class="glass"/>
+  <text class="label" x="100" y="20">Peak</text>
+  <text class="value" x="100" y="45">{max_day}</text>
+  <polyline class="spark-alt" points="{spark_peak}" transform="translate(20,50)"/>
+</g>
 
-<!-- ===== CARD 3: MOMENTUM ===== -->
-<rect x="560" y="70" width="200" height="70" rx="10"
-      fill="#ff6ec7" fill-opacity="0.15" stroke="#ff6ec7" stroke-opacity="0.3"/>
+<!-- MOMENTUM -->
+<g transform="translate(560,70)">
+  <rect width="200" height="80" rx="10"
+        fill="#ff6ec7" fill-opacity="0.15" stroke="#ff6ec7" stroke-opacity="0.3"/>
+  <text class="label" x="100" y="20">Momentum</text>
+  <text class="value" x="100" y="45">{momentum}</text>
+</g>
 
-<text class="label" x="580" y="95">Momentum</text>
-<text class="value" x="580" y="120">{momentum}</text>
+<!-- ===== ROW 2 ===== -->
+<!-- CONSISTENCY -->
+<g transform="translate(160,160)">
+  <rect width="200" height="60" rx="10" class="glass"/>
+  <text class="label" x="100" y="20">Consistency</text>
+  <text class="value" x="100" y="40">{consistency}%</text>
+  <polyline class="spark" points="{spark_consistency}" transform="translate(20,45) scale(1,0.6)"/>
+</g>
 
-<!-- Signature -->
-<text x="640" y="145" fill="#444" font-size="10">Built by Sarowar</text>
+<!-- BEST DAY -->
+<g transform="translate(440,160)">
+  <rect width="200" height="60" rx="10" class="glass"/>
+  <text class="label" x="100" y="20">Best Day</text>
+  <text class="value" x="100" y="40">{best_day}</text>
+  <polyline class="spark-alt" points="{spark_bestday}" transform="translate(20,45) scale(1,0.6)"/>
+</g>
+
+<!-- SIGNATURE -->
+<text x="640" y="205" fill="#9ca3af" opacity="0.6" font-size="10">
+Built by Sarowar
+</text>
 
 </svg>
 """
