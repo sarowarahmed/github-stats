@@ -147,6 +147,20 @@ graph_svg = f"""
 
 {''.join(heat_blocks)}
 
+<!-- TODAY LINE -->
+<line x1="{points[-1].split(',')[0]}" 
+      y1="60" 
+      x2="{points[-1].split(',')[0]}" 
+      y2="{height-40}"
+      stroke="#ff6ec7"
+      stroke-opacity="0.3"
+      stroke-dasharray="4,4"/>
+
+<text x="{points[-1].split(',')[0]}" y="50"
+      fill="#ff6ec7" font-size="10" text-anchor="middle">
+Today
+</text>
+
 <polyline class="shadow" points="{' '.join(shadow_points)}"/>
 <polyline class="main" points="{' '.join(points)}"/>
 <polyline class="pred" points="{' '.join(pred_points)}"/>
@@ -159,14 +173,6 @@ graph_svg = f"""
   <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/>
 </circle>
 
-<!-- TODAY LINE -->
-<line x1="{points[-1].split(',')[0]}" 
-      y1="60" 
-      x2="{points[-1].split(',')[0]}" 
-      y2="{height-40}"
-      stroke="#ff6ec7"
-      stroke-opacity="0.3"
-      stroke-dasharray="4,4"/>
 
 <text class="label" x="24" y="70">🔥 Streak: {streak} days</text>
 <text class="label" x="24" y="90">{momentum}</text>
@@ -220,16 +226,21 @@ for i, (_, row) in enumerate(last_7.iterrows()):
                begin="{delay}s"
                fill="freeze" />
     </rect>
+    ''')
+    # 🔥 ADD THIS BLOCK
+    if is_today:
+        bars.append(f'''
+    <rect x="{x}" y="{y}" width="50" height="{bar_height}"
+          fill="#ff6ec7" opacity="0.08"/>
+    ''')
 
+# keep your light edge + glow after
+    bars.append(f'''
     <rect x="{x}" y="{y}" width="50" height="6"
           fill="white" opacity="0.15"/>
 
     <rect x="{x}" y="{y}" width="50" height="{bar_height}" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
-
-    <!-- TODAY BAR GLOW -->
-    <rect x="{x}" y="{y}" width="50" height="{bar_height}"
-          fill="#ff6ec7" opacity="0.08"/>
     ''')
 
     # 🔹 day label (bottom)
