@@ -159,6 +159,15 @@ graph_svg = f"""
   <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/>
 </circle>
 
+<!-- TODAY LINE -->
+<line x1="{points[-1].split(',')[0]}" 
+      y1="60" 
+      x2="{points[-1].split(',')[0]}" 
+      y2="{height-40}"
+      stroke="#ff6ec7"
+      stroke-opacity="0.3"
+      stroke-dasharray="4,4"/>
+
 <text class="label" x="24" y="70">🔥 Streak: {streak} days</text>
 <text class="label" x="24" y="90">{momentum}</text>
 
@@ -312,6 +321,7 @@ insights_svg = f"""
 <rect x="5" y="5" width="790" height="210" rx="12" class="card"/>
 
 <text class="title" x="24" y="40">🧠 Dev Insights</text>
+<circle cx="760" cy="35" r="3" fill="#ff6ec7"/>
 <line x1="20" y1="50" x2="780" y2="50" stroke="#1f2937"/>
 
 <!-- ===== ROW 1 ===== -->
@@ -357,8 +367,8 @@ insights_svg = f"""
 </g>
 
 <!-- SIGNATURE -->
-<text x="640" y="205" fill="#9ca3af" opacity="0.6" font-size="10">
-Built by Sarowar
+<text x="720" y="40" fill="#9ca3af" opacity="0.8" font-size="11" text-anchor="end">
+Sarowar ⚡
 </text>
 
 </svg>
