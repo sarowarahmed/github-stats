@@ -56,7 +56,7 @@ Last 7 days
     <rect x="40" y="174.0" width="50" height="6.0" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="140" y="180" width="50" height="0" rx="6" fill="#00ecbc">
+    <rect x="140" y="180" width="50" height="0" rx="6" fill="url(#grad)">
       <animate attributeName="height"
                from="0"
                to="6.0"
@@ -71,10 +71,7 @@ Last 7 days
                fill="freeze" />
     </rect>
     
-    <rect x="140" y="174.0" width="50" height="6.0"
-          fill="#ff6ec7" opacity="0.08"/>
-    
-    <rect x="140" y="180" width="50" height="0" rx="6" fill="#00ecbc">
+    <rect x="140" y="180" width="50" height="0" rx="6" fill="url(#grad)">
       <animate attributeName="height" from="0" to="6.0" dur="0.8s" fill="freeze"/>
       <animate attributeName="y" from="180" to="174.0" dur="0.8s" fill="freeze"/>
     </rect>
@@ -85,7 +82,7 @@ Last 7 days
     <rect x="140" y="174.0" width="50" height="6.0" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="240" y="180" width="50" height="0" rx="6" fill="url(#grad)">
+    <rect x="240" y="180" width="50" height="0" rx="6" fill="#00ecbc">
       <animate attributeName="height"
                from="0"
                to="36.0"
@@ -100,7 +97,10 @@ Last 7 days
                fill="freeze" />
     </rect>
     
-    <rect x="240" y="180" width="50" height="0" rx="6" fill="url(#grad)">
+    <rect x="240" y="144.0" width="50" height="36.0"
+          fill="#ff6ec7" opacity="0.08"/>
+    
+    <rect x="240" y="180" width="50" height="0" rx="6" fill="#00ecbc">
       <animate attributeName="height" from="0" to="36.0" dur="0.8s" fill="freeze"/>
       <animate attributeName="y" from="180" to="144.0" dur="0.8s" fill="freeze"/>
     </rect>
