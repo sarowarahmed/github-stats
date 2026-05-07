@@ -128,6 +128,9 @@ for p in points:
     x, y = p.split(",")
     circles.append(f'<circle cx="{x}" cy="{y}" r="3" fill="white" stroke="#ff6ec7" stroke-width="1"/>')
 
+start_date = df['date'].iloc[-30].strftime("%b %d")
+end_date = df['date'].iloc[-1].strftime("%b %d")
+
 graph_svg = f"""
 <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
 
@@ -173,9 +176,9 @@ Today
   <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/>
 </circle>
 
-
-<text class="label" x="24" y="70">🔥 Streak: {streak} days</text>
-<text class="label" x="24" y="90">{momentum}</text>
+<text class="label" x="24" y="70">
+📅 {start_date} → {end_date}
+</text>
 
 </svg>
 """
