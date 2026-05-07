@@ -52,8 +52,8 @@ Today
   <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/>
 </circle>
 
-
-<text class="label" x="24" y="70">🔥 Streak: 29 days</text>
-<text class="label" x="24" y="90">📈 Rising</text>
+<text class="label" x="24" y="70">
+📅 Apr 08 → May 07
+</text>
 
 </svg>
