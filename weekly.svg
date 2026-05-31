@@ -160,61 +160,61 @@ Last 7 days
     <rect x="440" y="60.0" width="50" height="120.0" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="540" y="180" width="50" height="0" rx="6" fill="#00ecbc">
+    <rect x="540" y="180" width="50" height="0" rx="6" fill="url(#grad)">
+      <animate attributeName="height"
+               from="0"
+               to="37.89473684210526"
+               dur="0.8s"
+               begin="0.75s"
+               fill="freeze" />
+      <animate attributeName="y"
+               from="180"
+               to="142.10526315789474"
+               dur="0.8s"
+               begin="0.75s"
+               fill="freeze" />
+    </rect>
+    
+    <rect x="540" y="180" width="50" height="0" rx="6" fill="url(#grad)">
+      <animate attributeName="height" from="0" to="37.89473684210526" dur="0.8s" fill="freeze"/>
+      <animate attributeName="y" from="180" to="142.10526315789474" dur="0.8s" fill="freeze"/>
+    </rect>
+    
+    <rect x="540" y="142.10526315789474" width="50" height="6"
+          fill="white" opacity="0.15"/>
+
+    <rect x="540" y="142.10526315789474" width="50" height="37.89473684210526" rx="6"
+          fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
+    
+    <rect x="640" y="180" width="50" height="0" rx="6" fill="#00ecbc">
       <animate attributeName="height"
                from="0"
                to="18.94736842105263"
                dur="0.8s"
-               begin="0.75s"
+               begin="0.8999999999999999s"
                fill="freeze" />
       <animate attributeName="y"
                from="180"
                to="161.05263157894737"
                dur="0.8s"
-               begin="0.75s"
+               begin="0.8999999999999999s"
                fill="freeze" />
     </rect>
     
-    <rect x="540" y="161.05263157894737" width="50" height="18.94736842105263"
+    <rect x="640" y="161.05263157894737" width="50" height="18.94736842105263"
           fill="#ff6ec7" opacity="0.08"/>
     
-    <rect x="540" y="180" width="50" height="0" rx="6" fill="#00ecbc">
+    <rect x="640" y="180" width="50" height="0" rx="6" fill="#00ecbc">
       <animate attributeName="height" from="0" to="18.94736842105263" dur="0.8s" fill="freeze"/>
       <animate attributeName="y" from="180" to="161.05263157894737" dur="0.8s" fill="freeze"/>
     </rect>
     
-    <rect x="540" y="161.05263157894737" width="50" height="6"
+    <rect x="640" y="161.05263157894737" width="50" height="6"
           fill="white" opacity="0.15"/>
 
-    <rect x="540" y="161.05263157894737" width="50" height="18.94736842105263" rx="6"
+    <rect x="640" y="161.05263157894737" width="50" height="18.94736842105263" rx="6"
           fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
     
-    <rect x="640" y="180" width="50" height="0" rx="6" fill="url(#grad)">
-      <animate attributeName="height"
-               from="0"
-               to="6.315789473684211"
-               dur="0.8s"
-               begin="0.8999999999999999s"
-               fill="freeze" />
-      <animate attributeName="y"
-               from="180"
-               to="173.68421052631578"
-               dur="0.8s"
-               begin="0.8999999999999999s"
-               fill="freeze" />
-    </rect>
-    
-    <rect x="640" y="180" width="50" height="0" rx="6" fill="url(#grad)">
-      <animate attributeName="height" from="0" to="6.315789473684211" dur="0.8s" fill="freeze"/>
-      <animate attributeName="y" from="180" to="173.68421052631578" dur="0.8s" fill="freeze"/>
-    </rect>
-    
-    <rect x="640" y="173.68421052631578" width="50" height="6"
-          fill="white" opacity="0.15"/>
-
-    <rect x="640" y="173.68421052631578" width="50" height="6.315789473684211" rx="6"
-          fill="none" stroke="#ff6ec7" stroke-opacity="0.2"/>
-    
-<text x="55" y="195" fill="#9ca3af" font-size="11">Mon</text><text x="55" y="168.68421052631578" fill="#aaa" font-size="10">1</text><text x="155" y="195" fill="#9ca3af" font-size="11">Tue</text><text x="155" y="168.68421052631578" fill="#aaa" font-size="10">1</text><text x="255" y="195" fill="#9ca3af" font-size="11">Wed</text><text x="255" y="111.84210526315789" fill="#aaa" font-size="10">10</text><text x="355" y="195" fill="#9ca3af" font-size="11">Thu</text><text x="355" y="124.4736842105263" fill="#aaa" font-size="10">8</text><text x="455" y="195" fill="#9ca3af" font-size="11">Fri</text><text x="455" y="55.0" fill="#aaa" font-size="10">19</text><text x="555" y="195" fill="#9ca3af" font-size="11">Sat</text><text x="555" y="156.05263157894737" fill="#aaa" font-size="10">3</text><text x="655" y="195" fill="#9ca3af" font-size="11">Sun</text><text x="655" y="168.68421052631578" fill="#aaa" font-size="10">1</text>
+<text x="55" y="195" fill="#9ca3af" font-size="11">Mon</text><text x="55" y="168.68421052631578" fill="#aaa" font-size="10">1</text><text x="155" y="195" fill="#9ca3af" font-size="11">Tue</text><text x="155" y="168.68421052631578" fill="#aaa" font-size="10">1</text><text x="255" y="195" fill="#9ca3af" font-size="11">Wed</text><text x="255" y="111.84210526315789" fill="#aaa" font-size="10">10</text><text x="355" y="195" fill="#9ca3af" font-size="11">Thu</text><text x="355" y="124.4736842105263" fill="#aaa" font-size="10">8</text><text x="455" y="195" fill="#9ca3af" font-size="11">Fri</text><text x="455" y="55.0" fill="#aaa" font-size="10">19</text><text x="555" y="195" fill="#9ca3af" font-size="11">Sat</text><text x="555" y="137.10526315789474" fill="#aaa" font-size="10">6</text><text x="655" y="195" fill="#9ca3af" font-size="11">Sun</text><text x="655" y="156.05263157894737" fill="#aaa" font-size="10">3</text>
 
 </svg>
